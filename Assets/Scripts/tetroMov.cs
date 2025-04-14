@@ -23,72 +23,53 @@ public class tetroMov : MonoBehaviour {
     }
 
     void Update(){
+        if(!gManager.pause){
 
-        if(gManager.pontoDificuldade > 1000){
-            gManager.pontoDificuldade = 0;
-            gManager.dificuldade += 05f;
-        }
-        if(Input.GetKeyUp(KeyCode.RightAlt) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow)){
-            timer = velocidade;
-        } 
-        if(Input.GetKey(KeyCode.RightArrow)){
-            timer += Time.deltaTime;
-            if(timer > velocidade){
-                transform.position += new Vector3(1,0,0);
-                timer = 0;
+       
+            if(gManager.pontoDificuldade > 1000){
+                gManager.pontoDificuldade = 0;
+                gManager.dificuldade += 05f;
             }
-            if(posicaoValida()){
-                gManager.atualizaGrade(this);
-            }
-            else{
-            transform.position += new Vector3(-1,0,0);
-
-            }
-        }
-        if(Input.GetKey(KeyCode.LeftArrow)){
-              timer += Time.deltaTime;
-            if(timer > velocidade){
-                transform.position += new Vector3(-1,0,0);
-                timer = 0;
-            }
-            if(posicaoValida()){
-                gManager.atualizaGrade(this);
-            }
-            else{
-            transform.position += new Vector3(1,0,0);
-            }
-        }
-        if(Input.GetKey(KeyCode.DownArrow) ){//|| Time.time - queda >= 1){
-            timer += Time.deltaTime;
-            if(timer > velocidade){
-                transform.position += new Vector3(0,-1,0);
-                timer = 0;
-            }
-            if(posicaoValida()){
-                gManager.atualizaGrade(this);
-            }
-            else{
-            transform.position += new Vector3(0,1,0);
-            gManager.apagaLinha();
-
-            if(gManager.acimaGrade(this)){
-                gManager.gameOver();
+            if(Input.GetKeyUp(KeyCode.RightAlt) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow)){
+                timer = velocidade;
             } 
+            if(Input.GetKey(KeyCode.RightArrow)){
+                timer += Time.deltaTime;
+                if(timer > velocidade){
+                    transform.position += new Vector3(1,0,0);
+                    timer = 0;
+                }
+                if(posicaoValida()){
+                    gManager.atualizaGrade(this);
+                }
+                else{
+                transform.position += new Vector3(-1,0,0);
 
-            gManager.score += 10;
-            gManager.pontoDificuldade += 10;
-            enabled = false;
-            gSpawner.ProximaPeca();
+                }
             }
-            //queda = Time.time;
-        }
-
-        if(Time.time - queda >= (1 / gManager.dificuldade) && !Input.GetKey(KeyCode.DownArrow)){
-            transform.position += new Vector3(0,-1,0);
-            if(posicaoValida()){
-                gManager.atualizaGrade(this);
+            if(Input.GetKey(KeyCode.LeftArrow)){
+                timer += Time.deltaTime;
+                if(timer > velocidade){
+                    transform.position += new Vector3(-1,0,0);
+                    timer = 0;
+                }
+                if(posicaoValida()){
+                    gManager.atualizaGrade(this);
+                }
+                else{
+                transform.position += new Vector3(1,0,0);
+                }
             }
-            else{
+            if(Input.GetKey(KeyCode.DownArrow) ){//|| Time.time - queda >= 1){
+                timer += Time.deltaTime;
+                if(timer > velocidade){
+                    transform.position += new Vector3(0,-1,0);
+                    timer = 0;
+                }
+                if(posicaoValida()){
+                    gManager.atualizaGrade(this);
+                }
+                else{
                 transform.position += new Vector3(0,1,0);
                 gManager.apagaLinha();
 
@@ -100,12 +81,34 @@ public class tetroMov : MonoBehaviour {
                 gManager.pontoDificuldade += 10;
                 enabled = false;
                 gSpawner.ProximaPeca();
+                }
+            
+            }   
+
+            if(Time.time - queda >= (1 / gManager.dificuldade) && !Input.GetKey(KeyCode.DownArrow)){
+                transform.position += new Vector3(0,-1,0);
+                if(posicaoValida()){
+                    gManager.atualizaGrade(this);
+                }
+                else{
+                    transform.position += new Vector3(0,1,0);
+                    gManager.apagaLinha();
+
+                    if(gManager.acimaGrade(this)){
+                        gManager.gameOver();
+                    } 
+
+                    gManager.score += 10;
+                    gManager.pontoDificuldade += 10;
+                    enabled = false;
+                    gSpawner.ProximaPeca();
+                }
+                queda = Time.time;
             }
-            queda = Time.time;
-        }
         
-        if(Input.GetKeyDown(KeyCode.UpArrow)){
-            checaRoda();
+            if(Input.GetKeyDown(KeyCode.UpArrow)){
+                checaRoda();
+            }
         }
     }
 
@@ -141,6 +144,7 @@ public class tetroMov : MonoBehaviour {
                     }
             }
         }
+        
     }
 
     bool posicaoValida(){

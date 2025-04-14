@@ -12,10 +12,19 @@ public class gameManager:MonoBehaviour
 
     public int pontoDificuldade;
     public float dificuldade = 1 ;
+
+    public bool pause = false;
     public static Transform[,] grade = new Transform[largura,altura];
 
     public void Update()
     {
+        if(Input.GetKeyDown(KeyCode.P)){
+            pause = !pause;
+        }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();    
+        }
+
         textoScore.text = score.ToString();
     }
     public bool dentroGrade(Vector2 posicao){
