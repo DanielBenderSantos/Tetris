@@ -29,6 +29,7 @@ public class tetroMov : MonoBehaviour {
             if(gManager.pontoDificuldade > 1000){
                 gManager.pontoDificuldade = 0;
                 gManager.dificuldade += 05f;
+                gManager.nivel ++;
             }
             if(Input.GetKeyUp(KeyCode.RightAlt) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow)){
                 timer = velocidade;

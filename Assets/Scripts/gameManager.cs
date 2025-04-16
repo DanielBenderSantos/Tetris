@@ -8,7 +8,12 @@ public class gameManager:MonoBehaviour
     public static int largura = 10;
 
     public int score = 0;
+    public int linhas = 0;
+    public int nivel = 0;
     public TextMeshProUGUI textoScore;
+    public TextMeshProUGUI textoLinhas;
+    public TextMeshProUGUI textoNivel;
+
 
     public int pontoDificuldade;
     public float dificuldade = 1 ;
@@ -34,6 +39,8 @@ public class gameManager:MonoBehaviour
         }
 
         textoScore.text = score.ToString();
+        textoLinhas.text = "Linhas: " + linhas;
+        textoNivel.text = "Nível: " + nivel;
     }
     public bool dentroGrade(Vector2 posicao){
         return((int)posicao.x >= 0 &&(int)posicao.x < largura && (int)posicao.y >= 0);
@@ -114,6 +121,7 @@ public class gameManager:MonoBehaviour
                 y--;
                 score += 100;
                 pontoDificuldade += 100;
+                linhas++;
             }
         }
     }
