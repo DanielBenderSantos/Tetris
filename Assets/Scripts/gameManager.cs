@@ -15,14 +15,22 @@ public class gameManager:MonoBehaviour
 
     public bool pause = false;
     public static Transform[,] grade = new Transform[largura,altura];
+    public GameObject pauseMenuUI;
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P)){
-            pause = !pause;
-        }
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Application.Quit();    
+       if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (pauseMenuUI.activeSelf)
+            {
+                pause = !pause;
+                Resume();
+            }
+            else
+            {
+                pause = !pause;
+                Pause();
+            }
         }
 
         textoScore.text = score.ToString();
@@ -130,4 +138,18 @@ public class gameManager:MonoBehaviour
         SceneManager.LoadScene("Play"); 
     }
 
+    public void Pause()
+    {
+        pauseMenuUI.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void Resume()
+    {
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+    }
+     public void Sair(){
+        Application.Quit();
+    }
 }
