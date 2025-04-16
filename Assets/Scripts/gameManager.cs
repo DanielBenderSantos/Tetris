@@ -1,46 +1,36 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
-
 public class gameManager:MonoBehaviour
 {
     public static int altura = 20;
     public static int largura = 10;
-
     public int score = 0;
     public int linhas = 0;
-    public int nivel = 0;
+    public int nivel = 1;
     public TextMeshProUGUI textoScore;
     public TextMeshProUGUI textoLinhas;
     public TextMeshProUGUI textoNivel;
-
-
     public int pontoDificuldade;
     public float dificuldade = 1 ;
-
     public bool pause = false;
     public static Transform[,] grade = new Transform[largura,altura];
     public GameObject pauseMenuUI;
     public GameObject gameOverMenuUI;
-
     public void Update()
     {
-        textoScore.text = score.ToString();
+        textoScore.text = "Pontos: " + score.ToString();
         textoLinhas.text = "Linhas: " + linhas;
         textoNivel.text = "Nível: " + nivel;
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenuUI.activeSelf)
-            {
                 Resume();
-            }
             else
-            {
                 Pause();
-            }
         }
     }
+
     public bool dentroGrade(Vector2 posicao){
         return((int)posicao.x >= 0 &&(int)posicao.x < largura && (int)posicao.y >= 0);
     }
@@ -53,38 +43,29 @@ public class gameManager:MonoBehaviour
         for (int y=0; y<altura; y++){
             for (int x=0; x<largura; x++){
                 if(grade[x,y] != null){
-                    if(grade[x,y].parent == pecaTretris.transform){
+                    if(grade[x,y].parent == pecaTretris.transform)
                         grade[x,y] = null;
-                    }
                 }
             }
         }
         foreach(Transform peca in pecaTretris.transform){
             Vector2 posicao = arredonda(peca.position);
-
-            if(posicao.y < altura){
+            if(posicao.y < altura)
                 grade[(int)posicao.x,(int)posicao.y] = peca;
-            }
         }
-
-        
     }
 
     public Transform pocisaoTransformGrade(Vector2 posicao){
-        if(posicao.y > altura-1){
+        if(posicao.y > altura-1)
             return null;
-        }
-        else{
+        else
             return grade[(int)posicao.x,(int)posicao.y];
-
-        }
     }
 
     public bool linhaCheia(int y){
         for(int x=0; x < largura; x++){
-            if(grade[x,y] == null){
+            if(grade[x,y] == null)
                 return false;        
-            }
         }  
         return true;
     }
@@ -128,10 +109,8 @@ public class gameManager:MonoBehaviour
         for(int x=0; x< largura; x++){
             foreach(Transform quadrado in pecaTetroMino.transform){
                 Vector2 posicao = arredonda(quadrado.position);
-
-                if(posicao.y > altura -1){
+                if(posicao.y > altura -1)
                     return  true;
-                }
             }
         }
         return false;
@@ -145,7 +124,6 @@ public class gameManager:MonoBehaviour
         gameOverMenuUI.SetActive(false);
         SceneManager.LoadScene("Play");
         pause = false;
-
     }
     public void Pause()
     {
