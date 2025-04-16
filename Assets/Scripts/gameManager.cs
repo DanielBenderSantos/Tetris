@@ -22,10 +22,14 @@ public class gameManager:MonoBehaviour
     public bool pause = false;
     public static Transform[,] grade = new Transform[largura,altura];
     public GameObject pauseMenuUI;
+    public GameObject gameOverMenuUI;
 
     public void Update()
     {
-       if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        textoScore.text = score.ToString();
+        textoLinhas.text = "Linhas: " + linhas;
+        textoNivel.text = "Nível: " + nivel;
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenuUI.activeSelf)
             {
@@ -36,10 +40,6 @@ public class gameManager:MonoBehaviour
                 Pause();
             }
         }
-
-        textoScore.text = score.ToString();
-        textoLinhas.text = "Linhas: " + linhas;
-        textoNivel.text = "Nível: " + nivel;
     }
     public bool dentroGrade(Vector2 posicao){
         return((int)posicao.x >= 0 &&(int)posicao.x < largura && (int)posicao.y >= 0);
@@ -138,13 +138,15 @@ public class gameManager:MonoBehaviour
     }
 
     public void gameOver(){
-        SceneManager.LoadScene("gameOver");
+        gameOverMenuUI.SetActive(true);
+        pause = true;
     }
-    public void ReiniciarJogo()
-    {
-        SceneManager.LoadScene("Play"); 
-    }
+     public void ReiniciarJogo(){
+        gameOverMenuUI.SetActive(false);
+        SceneManager.LoadScene("Play");
+        pause = false;
 
+    }
     public void Pause()
     {
         pause = !pause;
