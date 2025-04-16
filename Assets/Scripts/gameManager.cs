@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class gameManager:MonoBehaviour
 {
@@ -24,16 +25,14 @@ public class gameManager:MonoBehaviour
 
     public void Update()
     {
-       if (Input.GetKeyDown(KeyCode.P))
+       if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenuUI.activeSelf)
             {
-                pause = !pause;
                 Resume();
             }
             else
             {
-                pause = !pause;
                 Pause();
             }
         }
@@ -148,12 +147,14 @@ public class gameManager:MonoBehaviour
 
     public void Pause()
     {
+        pause = !pause;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
+        pause = !pause;
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
     }

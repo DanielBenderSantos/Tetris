@@ -227,6 +227,7 @@ MonoBehaviour:
   queda: 0
   velocidade: 0.1
   timer: 0
+  ghostPiecePrefab: {fileID: 2715160839289673555, guid: 42256b2b88243a747bc2b05d98077a19, type: 3}
 --- !u!1 &3046754068399762768
 GameObject:
   m_ObjectHideFlags: 0
