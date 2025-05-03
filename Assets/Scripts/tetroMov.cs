@@ -132,7 +132,7 @@ public class tetroMov : MonoBehaviour
         if (gManager.pontoDificuldade >= 1000)
         {
             gManager.pontoDificuldade -= 1000;
-            gManager.dificuldade += 0.5f;
+            gManager.dificuldade += 1.5f;
             gManager.nivel++;
         }
     }
