@@ -8,20 +8,24 @@ public class gameManager:MonoBehaviour
     public int score = 0;
     public int linhas = 0;
     public int nivel = 1;
+    public string nivelDificuldade = "facil";
     public TextMeshProUGUI textoScore;
     public TextMeshProUGUI textoLinhas;
     public TextMeshProUGUI textoNivel;
+    public TextMeshProUGUI textonivelDificuldade;
     public int pontoDificuldade;
     public float dificuldade = 1 ;
     public bool pause = false;
     public static Transform[,] grade = new Transform[largura,altura];
     public GameObject pauseMenuUI;
+    public GameObject nivelMenuUI;
     public GameObject gameOverMenuUI;
     public void Update()
     {
         textoScore.text = "Pontos: " + score.ToString();
         textoLinhas.text = "Linhas: " + linhas;
         textoNivel.text = "Nível: " + nivel;
+        textonivelDificuldade.text = "Dificuldade: " + nivelDificuldade;
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenuUI.activeSelf)
@@ -30,6 +34,8 @@ public class gameManager:MonoBehaviour
                 Pause();
         }
     }
+
+  
 
     public bool dentroGrade(Vector2 posicao){
         return((int)posicao.x >= 0 &&(int)posicao.x < largura && (int)posicao.y >= 0);
@@ -99,7 +105,15 @@ public class gameManager:MonoBehaviour
                 deletaQuadrado(y);
                 moveTodasLinhasBaixo(y+1);
                 y--;
-                score += 100;
+                if(nivelDificuldade == "facil"){
+                    score += 100;
+                }
+                if(nivelDificuldade == "medio"){
+                    score += 200;
+                }
+                if(nivelDificuldade == "dificil"){
+                    score += 500;
+                }
                 pontoDificuldade += 100;
                 linhas++;
             }
@@ -130,6 +144,39 @@ public class gameManager:MonoBehaviour
         pause = !pause;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
+    }
+
+  public void MenuNivel()
+    {
+        if(score == 0){
+            pause = !pause;
+            nivelMenuUI.SetActive(true);
+            Time.timeScale = 0f;
+        }
+    }
+    public void ResumeMenu()
+    {
+        pause = !pause;
+        nivelMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+       public void facil()
+    {
+        dificuldade = 1;
+        nivelDificuldade = "facil";
+    }
+        public void medio()
+    {
+        dificuldade = 5;
+        nivelDificuldade = "medio";
+
+    }
+        public void dificil()
+    {
+        dificuldade = 10;
+        nivelDificuldade = "dificil";
+
     }
 
     public void Resume()
