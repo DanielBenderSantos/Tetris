@@ -108,6 +108,7 @@ public class gameManager:MonoBehaviour
                 if(nivelDificuldade == "facil"){
                     score += 100;
                 }
+                
                 if(nivelDificuldade == "medio"){
                     score += 200;
                 }
