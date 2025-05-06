@@ -9,6 +9,7 @@ public class tetroMov : MonoBehaviour
     public GameObject ghostPiecePrefab; // Prefab da peça fantasma
     private GameObject ghostPiece;      // Instância da peça fantasma
     private gameManager gManager;
+
     private spawnTetro gSpawner;
     void Start()
     {

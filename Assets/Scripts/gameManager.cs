@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 public class gameManager:MonoBehaviour
 {
     public static int altura = 20;
@@ -8,24 +9,32 @@ public class gameManager:MonoBehaviour
     public int score = 0;
     public int linhas = 0;
     public int nivel = 1;
-    public string nivelDificuldade = "facil";
+    public float dificuldade =  1;
+    public string nivelDificuldade =  "facil";
+
     public TextMeshProUGUI textoScore;
     public TextMeshProUGUI textoLinhas;
     public TextMeshProUGUI textoNivel;
     public TextMeshProUGUI textonivelDificuldade;
+
     public int pontoDificuldade;
-    public float dificuldade = 1 ;
     public bool pause = false;
     public static Transform[,] grade = new Transform[largura,altura];
     public GameObject pauseMenuUI;
-    public GameObject nivelMenuUI;
     public GameObject gameOverMenuUI;
+
+
+    private void Start() {
+        dificuldade =  PlayerPrefs.GetFloat("dificuldade");
+        nivelDificuldade =  PlayerPrefs.GetString("nivelDificuldade");
+    }
     public void Update()
     {
         textoScore.text = "Pontos: " + score.ToString();
         textoLinhas.text = "Linhas: " + linhas;
         textoNivel.text = "Nível: " + nivel;
-        textonivelDificuldade.text = "Dificuldade: " + nivelDificuldade;
+        textonivelDificuldade.text = "Dificuldade: " +  nivelDificuldade;
+
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenuUI.activeSelf)
@@ -140,6 +149,7 @@ public class gameManager:MonoBehaviour
         SceneManager.LoadScene("Play");
         pause = false;
     }
+  
     public void Pause()
     {
         pause = !pause;
@@ -147,38 +157,6 @@ public class gameManager:MonoBehaviour
         Time.timeScale = 0f;
     }
 
-  public void MenuNivel()
-    {
-        if(score == 0){
-            pause = !pause;
-            nivelMenuUI.SetActive(true);
-            Time.timeScale = 0f;
-        }
-    }
-    public void ResumeMenu()
-    {
-        pause = !pause;
-        nivelMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-    }
-
-       public void facil()
-    {
-        dificuldade = 1;
-        nivelDificuldade = "facil";
-    }
-        public void medio()
-    {
-        dificuldade = 5;
-        nivelDificuldade = "medio";
-
-    }
-        public void dificil()
-    {
-        dificuldade = 10;
-        nivelDificuldade = "dificil";
-
-    }
 
     public void Resume()
     {
@@ -186,7 +164,12 @@ public class gameManager:MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
     }
-     public void Sair(){
-        Application.Quit();
+
+    
+     public void Menu(){
+        pause = !pause;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MenuPrincipal");
     }
+
 }
