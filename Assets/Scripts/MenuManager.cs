@@ -26,17 +26,19 @@ public class MenuManager : MonoBehaviour
     {
         dificuldade = 1;
         nivelDificuldade = "facil";
-        
+        IniciarJogo();
     }
         public void medio()
     {
         dificuldade = 5;
         nivelDificuldade = "medio";
+        IniciarJogo();
     }
         public void dificil()
     {
         dificuldade = 10;
         nivelDificuldade = "dificil";
+        IniciarJogo();
     }
 
 

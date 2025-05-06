@@ -2,6 +2,22 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine.UI;
+
+[System.Serializable]
+public class ScoreData
+{
+    public string nome;
+    public int pontos;
+}
+[System.Serializable]
+public class Ranking
+{
+    public List<ScoreData> lista = new List<ScoreData>();
+}
 public class gameManager:MonoBehaviour
 {
     public static int altura = 20;
@@ -16,14 +32,27 @@ public class gameManager:MonoBehaviour
     public TextMeshProUGUI textoLinhas;
     public TextMeshProUGUI textoNivel;
     public TextMeshProUGUI textonivelDificuldade;
+    public TextMeshProUGUI rankingTexto;
+
 
     public int pontoDificuldade;
     public bool pause = false;
+    private bool nomeJaSalvo = false;
+
+    public Button botaoSalvar;
+
     public static Transform[,] grade = new Transform[largura,altura];
     public GameObject pauseMenuUI;
     public GameObject gameOverMenuUI;
 
+    public TMP_InputField  nomeInput;
+    public TextMeshProUGUI pontosTexto;
+    public int pontuacaoFinal;
 
+    private string caminho => Application.persistentDataPath + "/ranking.json";
+    private Ranking ranking = new Ranking();
+
+ 
     private void Start() {
         dificuldade =  PlayerPrefs.GetFloat("dificuldade");
         nivelDificuldade =  PlayerPrefs.GetString("nivelDificuldade");
@@ -35,13 +64,14 @@ public class gameManager:MonoBehaviour
         textoNivel.text = "Nível: " + nivel;
         textonivelDificuldade.text = "Dificuldade: " +  nivelDificuldade;
 
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+       if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && !TMP_InputFieldEstaSelecionado())
         {
             if (pauseMenuUI.activeSelf)
                 Resume();
             else
                 Pause();
         }
+
     }
 
   
@@ -143,6 +173,9 @@ public class gameManager:MonoBehaviour
     public void gameOver(){
         gameOverMenuUI.SetActive(true);
         pause = true;
+        pontuacaoFinal = int.Parse(score.ToString()); 
+        pontosTexto.text = "Parabéns! Seu placar foi: " + pontuacaoFinal;
+        
     }
      public void ReiniciarJogo(){
         gameOverMenuUI.SetActive(false);
@@ -171,5 +204,73 @@ public class gameManager:MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MenuPrincipal");
     }
+ 
+    
+public void SalvarPlacar()
+{
+    if (nomeJaSalvo)
+    {
+        Debug.Log("Nome já foi salvo.");
+        return;
+    }
+
+    string nome = nomeInput.text;
+
+    if (!string.IsNullOrEmpty(nome))
+    {
+        // Carrega dados antigos, se existirem
+        if (File.Exists(caminho))
+        {
+            string jsonExistente = File.ReadAllText(caminho);
+            ranking = JsonUtility.FromJson<Ranking>(jsonExistente);
+        }
+
+        ranking.lista.Add(new ScoreData { nome = nome, pontos = pontuacaoFinal });
+        ranking.lista = ranking.lista.OrderByDescending(s => s.pontos).Take(10).ToList();
+
+        string json = JsonUtility.ToJson(ranking, true);
+        File.WriteAllText(caminho, json);
+
+        nomeJaSalvo = true;
+        nomeInput.interactable = false;
+
+        // ✅ Aqui é onde você desativa o botão
+        botaoSalvar.interactable = false;
+
+        Debug.Log("Placar salvo com sucesso!");
+        CarregarRanking();
+    }
+}
+
+
+
+    void CarregarRanking()
+    {
+        if (!File.Exists(caminho))
+        {
+            rankingTexto.text = "Nenhum placar salvo ainda.";
+            return;
+        }
+
+        string json = File.ReadAllText(caminho);
+        Ranking ranking = JsonUtility.FromJson<Ranking>(json);
+
+        string resultado = " Ranking:\n";
+
+        int posicao = 1;
+        foreach (var score in ranking.lista)
+        {
+            resultado += $"{posicao}. {score.nome} - {score.pontos} pts\n";
+            posicao++;
+        }
+        rankingTexto.text = resultado;
+    }
+
+    private bool TMP_InputFieldEstaSelecionado()
+{
+    return UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null &&
+           UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null;
+}
+
 
 }
