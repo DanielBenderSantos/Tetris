@@ -117,15 +117,18 @@ public class tetroMov : MonoBehaviour
     {
         transform.position += Vector3.up;
         gManager.apagaLinha();
-        if (gManager.acimaGrade(this))
+        if (gManager.acimaGrade(this)){
             gManager.gameOver();
+        }else{
+            gManager.score += 10;
+            gManager.pontoDificuldade += 10;
+            enabled = false;
+            gSpawner.ProximaPeca();
+            if (ghostPiece != null)
+                Destroy(ghostPiece);
+        }
 
-        gManager.score += 10;
-        gManager.pontoDificuldade += 10;
-        enabled = false;
-        gSpawner.ProximaPeca();
-        if (ghostPiece != null)
-            Destroy(ghostPiece);
+       
     }
 
     void AtualizaDificuldade()

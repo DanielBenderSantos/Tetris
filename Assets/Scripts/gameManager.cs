@@ -71,6 +71,14 @@ public class gameManager:MonoBehaviour
             else
                 Pause();
         }
+        string nome = nomeInput.text;
+
+        if (!string.IsNullOrEmpty(nome))
+        {
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)){
+                SalvarPlacar();
+            } 
+        }
 
     }
 
@@ -175,6 +183,8 @@ public class gameManager:MonoBehaviour
         pause = true;
         pontuacaoFinal = int.Parse(score.ToString()); 
         pontosTexto.text = "Parabéns! Seu placar foi: " + pontuacaoFinal;
+
+        
         
     }
      public void ReiniciarJogo(){
